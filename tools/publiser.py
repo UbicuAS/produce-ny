@@ -33,7 +33,12 @@ def kjor(*kommando, **kvarg):
     """Kjør en kommando i prosjektroten og stopp hvis den feiler."""
     mappe = kvarg.pop("mappe", ROT)
     stille = kvarg.pop("stille", False)
-    r = subprocess.run(kommando, cwd=mappe,
+    # npm er npm.cmd på Windows, og CreateProcess finner den ikke uten at vi
+    # slår opp full sti først.
+    program = shutil.which(kommando[0])
+    if not program:
+        raise SystemExit("finner ikke %s i PATH" % kommando[0])
+    r = subprocess.run((program,) + kommando[1:], cwd=mappe,
                        capture_output=stille, text=True)
     if r.returncode != 0:
         if stille and r.stderr:
