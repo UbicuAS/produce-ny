@@ -129,20 +129,40 @@ Husk i tillegg, utenfor koden: fjern DNS-oppføringen for
 `produce.ubicu.cloud` når den ikke lenger skal brukes, så preview-en ikke
 blir liggende åpen etter lansering.
 
-## Hosting – ikke avklart
+## Hosting – GitHub Pages
 
-Bygget er med vilje helt statisk (`output: 'static'`, `format: 'directory'`),
-slik at `dist/` kan serveres like godt fra Cloudflare Workers, Cloudflare Pages
-eller et vanlig webhotell via FTP. Ingenting i prosjektet låser oss til én
-leverandør, og det finnes **ingen** wrangler-config her – den legges først inn
-når valget er tatt.
+Siden ligger på **GitHub Pages**, samme oppsett som `idebolig.ubicu.cloud`.
+
+```
+git push origin main
+        │
+        ├─ .github/workflows/publiser.yml: npm ci → npm run build
+        └─ dist/ lastes opp og legges ut på produce.ubicu.cloud
+```
+
+Du trenger ikke gjøre noe utover å pushe til `main`. Vil du legge ut på nytt
+uten en ny commit, kjør workflowen manuelt fra Actions-fanen.
+
+**`public/CNAME` er det som holder på domenet.** Astro kopierer den til
+`dist/CNAME` ved bygg. Sletter du den, faller `produce.ubicu.cloud` av ved
+neste publisering, og siden havner tilbake på `ubicuas.github.io`.
+
+**DNS ligger hos Domeneshop**, ikke hos GitHub – `ubicu.cloud` bruker
+navnetjenerne `ns1-3.hyp.net`. Underdomenet peker på GitHub Pages' fire
+adresser. Kun den ene oppføringen er rørt; `ubicu.cloud` sine MX-, SPF- og
+DMARC-oppføringer er andre oppføringstyper og skal ikke endres.
+
+**Én begrensning verdt å kjenne til:** GitHub Pages kan ikke sette egne
+HTTP-headere. Det betyr ingen CSP og ingen `X-Robots-Tag: noindex` på
+tjenernivå. Skjulingen for søkemotorer hviler derfor på metataggen og
+`robots.txt`, som begge følger `erForhandsvisning`-bryteren. Det er samme
+situasjon som Idébolig-forhåndsvisningen står i. Trenger vi ekte headere
+senere, må siden flyttes til Cloudflare Pages eller Workers – bygget er
+statisk nettopp for at et slikt bytte skal være mulig.
 
 Det gamle `npm run deploy`-skriptet kalte `wrangler deploy` uten at noen
 wrangler-config fantes, og ville derfor alltid feilet. Det er fjernet framfor å
 la det stå og se ut som en fungerende utvei.
-
-Merk at `produce.ubicu.cloud` krever en DNS-oppføring under `ubicu.cloud`.
-Den skal ikke opprettes uten at Marius har godkjent det.
 
 ## Må avklares med kunden før lansering
 
