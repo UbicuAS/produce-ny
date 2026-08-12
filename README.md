@@ -144,11 +144,22 @@ npm run publiser
 ```
 
 **Hvorfor et skript og ikke en workflow.** Den riktige løsningen er å la GitHub
-bygge selv ved push til `main`, og den workflowen ligger ferdig i
-`.github/workflows/publiser.yml`. Den kan bare ikke pushes: GitHub nekter
-OAuth-apper å skrive under `.github/workflows/` uten `workflow`-scope, og
-innloggingen på maskinen har det ikke. Får tokenet det scopet, push workflowen,
-sett Pages-kilden tilbake til «GitHub Actions» og slett `tools/publiser.py`.
+bygge selv ved push til `main`. Den workflowen er skrevet og ligger klar på den
+**lokale** branchen `workflow-venter` (`.github/workflows/publiser.yml`) – den
+finnes ikke på GitHub, for den kan ikke pushes dit: GitHub nekter OAuth-apper å
+skrive under `.github/workflows/` uten `workflow`-scope, og innloggingen på
+maskinen har det ikke.
+
+Slik bytter du over den dagen tokenet har scopet
+(`gh auth refresh -h github.com -s workflow`, kjørt fra Claude – tokenet ligger
+i den MSIX-pakkede appens legitimasjonslager, ikke i din egen terminal):
+
+```bash
+git checkout main && git merge workflow-venter && git push origin main
+```
+
+Sett så Pages-kilden til «GitHub Actions» i repoinnstillingene, og slett
+`tools/publiser.py` og denne seksjonen.
 
 **To filer i `public/` holder siden oppe, og begge er lette å slette i vanvare:**
 
