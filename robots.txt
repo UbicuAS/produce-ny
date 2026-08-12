@@ -1,0 +1,9 @@
+# FORHÅNDSVISNING for kundegodkjenning – ikke kundens side i drift.
+#
+# Hele siden er sperret med vilje. Innholdet er nesten identisk med
+# produce.no, og to like sider ville konkurrert om de samme søkeordene
+# til skade for kundens egen synlighet.
+#
+# Åpnes ved å sette erForhandsvisning = false i src/data/site.ts.
+User-agent: *
+Disallow: /
