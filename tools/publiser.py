@@ -51,6 +51,19 @@ def kjor(*kommando, **kvarg):
     return (r.stdout or "").strip()
 
 
+def rydd_arbeidstre():
+    """Fjern arbeidstreet. Slett mappa selv og la git rydde bokføringen.
+
+    `git worktree remove` er skjør her: den leter etter en `locked`-fil som
+    ikke finnes når arbeidstreet ligger på en annen disk enn repoet, og feiler
+    med exit 128 etter at jobben er gjort. Å slette mappa og kjøre `prune`
+    gir samme resultat uten den fellen.
+    """
+    if os.path.isdir(ARBEIDSTRE):
+        shutil.rmtree(ARBEIDSTRE, ignore_errors=True)
+    subprocess.run(["git", "worktree", "prune"], cwd=ROT, capture_output=True)
+
+
 def main():
     skitten = kjor("git", "status", "--porcelain", stille=True)
     if skitten:
@@ -76,8 +89,7 @@ def main():
                 % maa_finnes)
 
     # Eget arbeidstre for gh-pages, saa main-mappa aldri roeres.
-    if os.path.isdir(ARBEIDSTRE):
-        kjor("git", "worktree", "remove", "--force", ARBEIDSTRE, stille=True)
+    rydd_arbeidstre()
     finnes = kjor("git", "branch", "--list", BRANCH, stille=True)
     if finnes:
         kjor("git", "worktree", "add", ARBEIDSTRE, BRANCH, stille=True)
@@ -103,7 +115,7 @@ def main():
         print("Legger ut ...")
         kjor("git", "push", "origin", BRANCH, mappe=ARBEIDSTRE)
     finally:
-        kjor("git", "worktree", "remove", "--force", ARBEIDSTRE, stille=True)
+        rydd_arbeidstre()
 
     print("\nLagt ut fra main %s. Siden er https://produce.ubicu.cloud/" % commit)
     print("GitHub Pages bruker et minutt eller to paa aa oppdatere seg.")
