@@ -161,6 +161,14 @@ git checkout main && git merge workflow-venter && git push origin main
 Sett så Pages-kilden til «GitHub Actions» i repoinnstillingene, og slett
 `tools/publiser.py` og denne seksjonen.
 
+**På en ny maskin** må utleggingsmappa være klarert i git, ellers stopper
+skriptet med «dubious ownership». Arbeidstreet ligger på `C:` mens repoet ligger
+på delingen, og git liker ikke den kombinasjonen uten beskjed:
+
+```bash
+git config --global --add safe.directory C:/Ubicu/publisering/produce-ny
+```
+
 **To filer i `public/` holder siden oppe, og begge er lette å slette i vanvare:**
 
 | Fil | Hva den gjør | Hvis den forsvinner |
