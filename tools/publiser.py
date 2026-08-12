@@ -26,7 +26,11 @@ import sys
 
 ROT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BRANCH = "gh-pages"
-ARBEIDSTRE = os.path.join(ROT, ".gh-pages-arbeidstre")
+# Arbeidstreet legges på C:, ikke ved siden av prosjektet på Z:. To grunner:
+# git nekter å jobbe i et arbeidstre på SMB-delingen uten en egen
+# safe.directory-oppføring, og delingen er treg og faller ut. Samme regel som
+# forhåndsvisningsserverne følger - se .claude/preview/README.md.
+ARBEIDSTRE = r"C:\Ubicu\publisering\produce-ny"
 
 
 def kjor(*kommando, **kvarg):
