@@ -1,0 +1,339 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base
+  title="Kontakt Produce AS – lyd, lys og sceneproduksjon"
+  description="Ta kontakt med Produce AS for et uforpliktende tilbud på lyd, lys og sceneproduksjon. Ring +47 666 99 666 eller send en e-post til post@produce.no."
+  path="/kontakt/"
+  ogImage="/bilder/galleri/rigg-konferanse.webp"
+>
+  <section class="section kontakt-hero">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal data-reveal-trinn="0">Kontakt</p>
+      <h1 data-reveal data-reveal-trinn="1">Vi er klare. La oss ta en prat.</h1>
+      <p class="lead kontakt-hero__lead" data-reveal data-reveal-trinn="2">
+        Fortell oss kort hva du planlegger – dato, sted, omtrent hvor mange
+        gjester – så kommer vi tilbake med forslag og pris.
+      </p>
+    </div>
+  </section>
+
+  <section class="section kontakt">
+    <div class="wrap kontakt__grid">
+      <!-- Direkte kontakt -->
+      <div class="kontakt__info" data-reveal="venstre">
+        <h2>Snakk med oss direkte</h2>
+
+        <ul class="kontaktliste">
+          <li>
+            <span class="kontaktliste__merkelapp">Telefon</span>
+            <a class="kontaktliste__verdi" href={site.phoneHref}>{site.phone}</a>
+          </li>
+          <li>
+            <span class="kontaktliste__merkelapp">E-post</span>
+            <a class="kontaktliste__verdi" href={site.emailHref}>{site.email}</a>
+          </li>
+          <li>
+            <span class="kontaktliste__merkelapp">Facebook</span>
+            <a
+              class="kontaktliste__verdi"
+              href={site.facebook}
+              rel="noopener noreferrer external">facebook.com/produceas</a
+            >
+          </li>
+        </ul>
+
+        <div class="kontakt__boks">
+          <h3>Hva vi trenger å vite</h3>
+          <ul>
+            <li>Type arrangement og omtrent antall gjester</li>
+            <li>Dato og sted</li>
+            <li>Om lokalet har scene, strøm og innlasting</li>
+            <li>Om du trenger personell, eller bare utstyr</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Skjema -->
+      <div class="kontakt__skjema" data-reveal="hoyre">
+        <h2>Send en forespørsel</h2>
+
+        <form id="kontaktskjema" novalidate>
+          <p class="felt">
+            <label for="navn">Navn <span aria-hidden="true">*</span></label>
+            <input
+              id="navn"
+              name="navn"
+              type="text"
+              required
+              autocomplete="name"
+            />
+          </p>
+
+          <p class="felt">
+            <label for="epost">E-post <span aria-hidden="true">*</span></label>
+            <input
+              id="epost"
+              name="epost"
+              type="email"
+              required
+              autocomplete="email"
+            />
+          </p>
+
+          <p class="felt">
+            <label for="telefon">Telefon</label>
+            <input
+              id="telefon"
+              name="telefon"
+              type="tel"
+              autocomplete="tel"
+            />
+          </p>
+
+          <p class="felt">
+            <label for="melding">
+              Din melding <span aria-hidden="true">*</span>
+            </label>
+            <textarea id="melding" name="melding" rows="6" required></textarea>
+          </p>
+
+          <p class="felt-hjelp" id="skjema-hjelp">
+            Felt merket med <span aria-hidden="true">*</span>
+            <span class="visually-hidden">stjerne</span> må fylles ut.
+          </p>
+
+          <button class="btn" type="submit">Send forespørsel</button>
+
+          <p class="skjema-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <p class="skjema-note">
+          <strong>Merk i forhåndsvisningen:</strong> skjemaet har ennå ingen
+          server å sende til. Knappen åpner derfor e-postprogrammet ditt med
+          teksten ferdig utfylt. Ved lansering kobles skjemaet til et ekte
+          endepunkt med spamfilter.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .kontakt-hero {
+    padding-bottom: 0;
+  }
+
+  .kontakt-hero__lead {
+    max-width: 42rem;
+    margin-top: 1.25rem;
+  }
+
+  .kontakt__grid {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    align-items: start;
+  }
+
+  .kontakt h2 {
+    font-size: clamp(1.4rem, 1.2rem + 1vw, 1.8rem);
+    margin-bottom: 1.75rem;
+  }
+
+  /* Kontaktliste ------------------------------------------------------ */
+
+  .kontaktliste {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .kontaktliste li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--accent);
+  }
+
+  .kontaktliste__merkelapp {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 700;
+  }
+
+  .kontaktliste__verdi {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    word-break: break-word;
+  }
+
+  .kontaktliste__verdi:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .kontakt__boks {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .kontakt__boks h3 {
+    font-size: 1rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .kontakt__boks ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--text-muted);
+    display: grid;
+    gap: 0.45rem;
+    font-size: 0.95rem;
+  }
+
+  /* Skjema ------------------------------------------------------------ */
+
+  .felt {
+    display: grid;
+    gap: 0.45rem;
+    margin-bottom: 1.15rem;
+  }
+
+  .felt label {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .felt label span {
+    color: var(--accent);
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    transition: border-color 0.18s var(--ease), background-color 0.18s var(--ease);
+  }
+
+  input:hover,
+  textarea:hover {
+    border-color: #3d3d52;
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: var(--accent);
+    background: var(--surface-2);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 8rem;
+  }
+
+  input[aria-invalid='true'],
+  textarea[aria-invalid='true'] {
+    border-color: #ff6b6b;
+  }
+
+  .felt-hjelp {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 1.25rem;
+  }
+
+  .felt-hjelp span:first-child {
+    color: var(--accent);
+  }
+
+  .skjema-status {
+    margin-top: 1rem;
+    font-size: 0.92rem;
+    color: var(--accent);
+    min-height: 1.4em;
+  }
+
+  .skjema-note {
+    margin-top: 1.75rem;
+    padding: 1rem 1.15rem;
+    font-size: 0.87rem;
+    line-height: 1.55;
+    color: #ffd9ab;
+    background: #241703;
+    border: 1px solid #4a2f06;
+    border-radius: var(--radius);
+  }
+
+  .skjema-note strong {
+    color: var(--accent);
+  }
+</style>
+
+<script>
+  const skjema = document.querySelector<HTMLFormElement>('#kontaktskjema');
+  const status = document.querySelector<HTMLElement>('.skjema-status');
+
+  skjema?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!skjema || !status) return;
+
+    // Enkel validering, med aria-invalid så skjermlesere får det med seg.
+    const påkrevd = ['navn', 'epost', 'melding'];
+    let førsteFeil: HTMLInputElement | HTMLTextAreaElement | null = null;
+
+    for (const navn of påkrevd) {
+      const felt = skjema.elements.namedItem(navn) as
+        | HTMLInputElement
+        | HTMLTextAreaElement
+        | null;
+      if (!felt) continue;
+      const ugyldig = !felt.value.trim() || !felt.checkValidity();
+      felt.setAttribute('aria-invalid', String(ugyldig));
+      if (ugyldig && !førsteFeil) førsteFeil = felt;
+    }
+
+    if (førsteFeil) {
+      status.textContent = 'Fyll ut feltene som mangler, så sender vi videre.';
+      førsteFeil.focus();
+      return;
+    }
+
+    const verdi = (navn: string) =>
+      (
+        (skjema.elements.namedItem(navn) as HTMLInputElement | null)?.value ?? ''
+      ).trim();
+
+    const emne = `Forespørsel fra ${verdi('navn')}`;
+    const kropp = [
+      `Navn: ${verdi('navn')}`,
+      `E-post: ${verdi('epost')}`,
+      `Telefon: ${verdi('telefon') || '(ikke oppgitt)'}`,
+      '',
+      verdi('melding'),
+    ].join('\n');
+
+    status.textContent =
+      'Åpner e-postprogrammet ditt med meldingen ferdig utfylt …';
+
+    window.location.href =
+      `mailto:post@produce.no?subject=${encodeURIComponent(emne)}` +
+      `&body=${encodeURIComponent(kropp)}`;
+  });
+</script>

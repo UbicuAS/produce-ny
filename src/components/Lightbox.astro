@@ -1,0 +1,345 @@
+---
+/**
+ * Lightbox bygget på <dialog>.
+ *
+ * Hvorfor native dialog: showModal() gir oss fokusfelle, Esc-lukking,
+ * inert bakgrunn og korrekt rolle gratis fra nettleseren. Et selvbygget
+ * overlay måtte ha reimplementert alt dette, og gjort det dårligere.
+ *
+ * Progressiv forbedring: markupen i galleriet er vanlige <figure>-er uten
+ * knapper. Skriptet oppgraderer dem til betjenbare elementer først når det
+ * faktisk kjører. Uten JS finnes det derfor ingen døde kontroller – bildene
+ * ligger synlige på siden som før.
+ */
+---
+
+<dialog class="lys" aria-label="Bildevisning">
+  <div class="lys__ramme">
+    <button class="lys__lukk" type="button" aria-label="Lukk bildevisning">
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="22" height="22">
+        <path
+          d="M6 6l12 12M18 6L6 18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"></path>
+      </svg>
+    </button>
+
+    <button class="lys__nav lys__nav--forrige" type="button" aria-label="Forrige bilde">
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="26" height="26">
+        <path
+          d="M15 5l-7 7 7 7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+
+    <figure class="lys__figur">
+      <!-- Bevisst uten src: et tomt src="" ville fått nettleseren til å
+           laste sidens egen URL som bilde ved hver sidevisning. -->
+      <img class="lys__bilde" alt="" />
+      <figcaption class="lys__tekst">
+        <span class="lys__beskrivelse"></span>
+        <span class="lys__teller" aria-hidden="true"></span>
+      </figcaption>
+    </figure>
+
+    <button class="lys__nav lys__nav--neste" type="button" aria-label="Neste bilde">
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="26" height="26">
+        <path
+          d="M9 5l7 7-7 7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+  </div>
+
+  <p class="lys__hint" aria-hidden="true">Bruk piltastene for å bla · Esc lukker</p>
+</dialog>
+
+<style>
+  .lys {
+    width: min(96vw, 1200px);
+    max-width: none;
+    max-height: 94vh;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    overflow: visible;
+  }
+
+  .lys::backdrop {
+    background: rgb(4 4 7 / 0.9);
+    backdrop-filter: blur(6px);
+  }
+
+  .lys[open] {
+    animation: lys-inn 0.28s var(--ease);
+  }
+
+  .lys[open]::backdrop {
+    animation: lys-bakgrunn 0.28s var(--ease);
+  }
+
+  @keyframes lys-inn {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  @keyframes lys-bakgrunn {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .lys__ramme {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .lys__figur {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .lys__bilde {
+    width: 100%;
+    max-height: 78vh;
+    object-fit: contain;
+    border-radius: var(--radius);
+    background: var(--bg-alt);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .lys__tekst {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+    margin-top: 0.9rem;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+
+  .lys__teller {
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.85rem;
+  }
+
+  /* Kontroller ------------------------------------------------------- */
+
+  .lys__lukk,
+  .lys__nav {
+    display: grid;
+    place-items: center;
+    background: rgb(22 22 31 / 0.9);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.18s var(--ease), color 0.18s var(--ease),
+      border-color 0.18s var(--ease), transform 0.18s var(--ease);
+  }
+
+  .lys__nav {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .lys__lukk {
+    position: absolute;
+    top: -3.4rem;
+    right: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    z-index: 2;
+  }
+
+  .lys__lukk:hover,
+  .lys__nav:hover {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: var(--accent);
+    transform: scale(1.07);
+  }
+
+  .lys__nav:disabled {
+    opacity: 0.3;
+    cursor: default;
+    transform: none;
+    background: rgb(22 22 31 / 0.9);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  .lys__hint {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 720px) {
+    .lys__ramme {
+      grid-template-columns: 1fr;
+    }
+
+    .lys__nav {
+      position: absolute;
+      top: 40%;
+      z-index: 2;
+      width: 2.6rem;
+      height: 2.6rem;
+    }
+
+    .lys__nav--forrige {
+      left: 0.4rem;
+    }
+
+    .lys__nav--neste {
+      right: 0.4rem;
+    }
+
+    .lys__lukk {
+      top: -3rem;
+    }
+
+    .lys__hint {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lys[open],
+    .lys[open]::backdrop {
+      animation: none;
+    }
+
+    .lys__lukk:hover,
+    .lys__nav:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  type Bilde = { src: string; alt: string; tekst: string };
+
+  const dialog = document.querySelector<HTMLDialogElement>('.lys');
+  if (dialog && typeof dialog.showModal === 'function') {
+    const bildeEl = dialog.querySelector<HTMLImageElement>('.lys__bilde')!;
+    const beskrivelseEl = dialog.querySelector<HTMLElement>('.lys__beskrivelse')!;
+    const tellerEl = dialog.querySelector<HTMLElement>('.lys__teller')!;
+    const forrigeBtn = dialog.querySelector<HTMLButtonElement>('.lys__nav--forrige')!;
+    const nesteBtn = dialog.querySelector<HTMLButtonElement>('.lys__nav--neste')!;
+    const lukkBtn = dialog.querySelector<HTMLButtonElement>('.lys__lukk')!;
+
+    // Alle elementer som skal kunne åpnes, gruppert på data-lys="<gruppe>".
+    const utløsere = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-lys]')
+    );
+
+    const grupper = new Map<string, HTMLElement[]>();
+    for (const el of utløsere) {
+      const g = el.dataset.lys || 'standard';
+      if (!grupper.has(g)) grupper.set(g, []);
+      grupper.get(g)!.push(el);
+
+      // Oppgrader til betjenbart element – først nå, når JS beviselig kjører.
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('aria-haspopup', 'dialog');
+      const navn = el.dataset.lysTekst || el.dataset.lysAlt || 'bilde';
+      el.setAttribute('aria-label', `Vis større: ${navn}`);
+      el.style.cursor = 'zoom-in';
+    }
+
+    let aktivGruppe: HTMLElement[] = [];
+    let indeks = 0;
+    let sisteFokus: HTMLElement | null = null;
+
+    const lesBilde = (el: HTMLElement): Bilde => ({
+      src: el.dataset.lysSrc || el.querySelector('img')?.src || '',
+      alt: el.dataset.lysAlt || el.querySelector('img')?.alt || '',
+      tekst: el.dataset.lysTekst || '',
+    });
+
+    const vis = (i: number) => {
+      indeks = i;
+      const data = lesBilde(aktivGruppe[i]);
+      bildeEl.src = data.src;
+      bildeEl.alt = data.alt;
+      beskrivelseEl.textContent = data.tekst || data.alt;
+      tellerEl.textContent = `${i + 1} / ${aktivGruppe.length}`;
+
+      const enkelt = aktivGruppe.length < 2;
+      forrigeBtn.disabled = enkelt;
+      nesteBtn.disabled = enkelt;
+      forrigeBtn.hidden = enkelt;
+      nesteBtn.hidden = enkelt;
+    };
+
+    const bla = (steg: number) => {
+      if (aktivGruppe.length < 2) return;
+      vis((indeks + steg + aktivGruppe.length) % aktivGruppe.length);
+    };
+
+    const åpne = (el: HTMLElement) => {
+      aktivGruppe = grupper.get(el.dataset.lys || 'standard') || [el];
+      sisteFokus = el;
+      vis(aktivGruppe.indexOf(el));
+      dialog.showModal();
+    };
+
+    for (const el of utløsere) {
+      el.addEventListener('click', () => åpne(el));
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          åpne(el);
+        }
+      });
+    }
+
+    forrigeBtn.addEventListener('click', () => bla(-1));
+    nesteBtn.addEventListener('click', () => bla(1));
+    lukkBtn.addEventListener('click', () => dialog.close());
+
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        bla(-1);
+      }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        bla(1);
+      }
+    });
+
+    // Klikk på backdrop (utenfor rammen) lukker.
+    dialog.addEventListener('click', (e) => {
+      if (!(e.target as HTMLElement).closest('.lys__ramme')) dialog.close();
+    });
+
+    // Returner fokus dit brukeren var.
+    dialog.addEventListener('close', () => {
+      sisteFokus?.focus();
+      bildeEl.removeAttribute('src');
+      bildeEl.alt = '';
+    });
+  }
+</script>

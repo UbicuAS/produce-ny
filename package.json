@@ -1,0 +1,17 @@
+{
+  "name": "produce-ny",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Oppgradert nettside for Produce AS - forhandsvisning pa produce.ubicu.cloud",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "serve": "python -m http.server 4321 --directory dist"
+  },
+  "dependencies": {
+    "astro": "^5.14.1"
+  }
+}

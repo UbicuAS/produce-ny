@@ -1,0 +1,5 @@
+# Forhåndsvisning / utkast for Produce AS.
+# Skal ikke indekseres. Fjernes/erstattes først hvis siden settes i drift
+# på kundens eget domene.
+User-agent: *
+Disallow: /

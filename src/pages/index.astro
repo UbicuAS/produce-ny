@@ -1,0 +1,889 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, tjenester, pakker, galleri } from '../data/site';
+---
+
+<Base
+  title="Produce AS – lyd, lys og sceneproduksjon til arrangementer"
+  description="Produce AS leverer lyd, lys og sceneproduksjon til festivaler, konserter, idrettsarrangementer, konferanser og fester. Ferdige pakkeløsninger fra 1.500,- inkl. mva."
+  path="/"
+>
+  <!-- ============================================================ Hero -- -->
+  <section class="hero">
+    <div class="hero__lerret" aria-hidden="true">
+      <img
+        class="hero__bg"
+        src="/bilder/galleri/staysman.webp"
+        alt=""
+        width="1920"
+        height="1080"
+        fetchpriority="high"
+        decoding="async"
+        data-parallax="0.16"
+      />
+    </div>
+
+    <div class="wrap hero__inner">
+      <p class="eyebrow" data-reveal data-reveal-trinn="0">Din event-partner</p>
+      <h1 data-reveal data-reveal-trinn="1">
+        Vi skaper uforglemmelige opplevelser&nbsp;– sammen med deg
+      </h1>
+      <p class="lead hero__lead" data-reveal data-reveal-trinn="2">
+        Lyd, lys og sceneproduksjon til alt fra intime konserter til store
+        arenaproduksjoner. Du bestemmer hva kvelden skal være. Vi sørger for at
+        teknikken bærer den.
+      </p>
+      <div class="btn-row" data-reveal data-reveal-trinn="3">
+        <a class="btn" href="#pakker">Se pakkeløsninger</a>
+        <a class="btn btn--ghost" href="/kontakt/">Snakk med oss</a>
+      </div>
+    </div>
+
+    <a class="hero__cue" href="#tjenester" aria-label="Bla ned til tjenester">
+      <span aria-hidden="true"></span>
+    </a>
+  </section>
+
+  <!-- ======================================================= Nøkkeltall -- -->
+  <section class="section--alt trust">
+    <div class="wrap trust__inner">
+      <div class="trust__item" data-reveal data-reveal-trinn="0">
+        <strong>Festival til firmafest</strong>
+        <span>Ingen jobb er for liten eller for stor</span>
+      </div>
+      <div class="trust__item" data-reveal data-reveal-trinn="1">
+        <strong>Utstyr og personell</strong>
+        <span>Vi rigger, kjører og pakker ned</span>
+      </div>
+      <div class="trust__item" data-reveal data-reveal-trinn="2">
+        <strong>Mange års erfaring</strong>
+        <span>Foretrukket leverandør for faste kunder</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== Tjenester -- -->
+  <section class="section" id="tjenester">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Vi tilbyr</p>
+        <h2>Tjenester</h2>
+        <p>
+          Fire områder vi kan godt. Felles for alle: vi prosjekterer sammen med
+          deg, og tar hånd om de tekniske detaljene så du kan konsentrere deg om
+          arrangementet.
+        </p>
+      </div>
+
+      <div class="grid grid--4">
+        {
+          tjenester.map((t, i) => (
+            <article class="card" data-reveal data-reveal-trinn={i}>
+              <div class="card__media">
+                <img
+                  src={t.bilde}
+                  alt={t.alt}
+                  width={t.bredde}
+                  height={t.hoyde}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="card__body">
+                <h3>{t.tittel}</h3>
+                <p>{t.tekst}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================== Om oss -- -->
+  <section class="section section--alt" id="om-oss">
+    <div class="wrap om">
+      <div class="om__tekst" data-reveal="venstre">
+        <p class="eyebrow">Om oss</p>
+        <h2>Teknikken skal ikke merkes. Bare virke.</h2>
+        <div class="prose">
+          <p>
+            Produce AS er en erfaren leverandør av lyd, lys og sceneproduksjon.
+            Vi har levert til idrettsarrangementer, bryllup og firmafester, til
+            store arenaproduksjoner og konserter – og vet at hvert arrangement
+            har sin egen dramaturgi.
+          </p>
+          <p>
+            Vi jobber tett med kundene våre og lager skreddersydde produksjoner
+            som møter behovet og visjonen bak arrangementet. Mange av dem er
+            faste kunder, og det er vi stolte av. Det forplikter: pålitelighet,
+            kreativitet og høy kvalitet, hver gang.
+          </p>
+          <p>
+            Enten det er én høyttalerløsning til et privat arrangement eller en
+            komplett produksjon til en stor festival – vi håndterer detaljene så
+            arrangementet blir både profesjonelt og minneverdig.
+          </p>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn--ghost" href="/kontakt/">Ta kontakt</a>
+        </div>
+      </div>
+
+      <figure
+        class="om__bilde"
+        data-reveal="hoyre"
+        data-lys="om"
+        data-lys-src="/bilder/galleri/tom-scene.webp"
+        data-lys-alt="Ferdig rigget utendørsscene med tak i skumringen, med line array-høyttalere på hver side og rødt og lilla scenelys."
+        data-lys-tekst="Mobil utendørsscene, ferdig rigget før dørene åpner"
+      >
+        <img
+          src="/bilder/galleri/tom-scene.webp"
+          alt="Ferdig rigget utendørsscene med tak i skumringen, med line array-høyttalere på hver side og rødt og lilla scenelys."
+          width="1920"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>Mobil utendørsscene, ferdig rigget før dørene åpner.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================================================== Pakkeløsninger -- -->
+  <section class="section" id="pakker">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Pakkeløsninger</p>
+        <h2>Ferdige pakker, klare til å rykke ut</h2>
+        <p>
+          Fire pakker som dekker de fleste fester og samlinger. Alle kan
+          skreddersys etter behov og setting – si fra hva du planlegger, så
+          setter vi sammen riktig utstyr.
+        </p>
+      </div>
+
+      <div class="pakkevisning" data-pakkevisning>
+        <!--
+          Bryteren er skjult i markupen og vises først av JS. Uten JS står
+          begge visningene under hverandre, og siden er fortsatt komplett.
+        -->
+        <div class="bryter" data-bryter hidden>
+          <button type="button" data-mal="kort" aria-pressed="true">
+            Kort
+          </button>
+          <button type="button" data-mal="tabell" aria-pressed="false">
+            Sammenlign
+          </button>
+        </div>
+
+        <!-- Kortvisning ------------------------------------------------- -->
+        <div class="grid grid--4" data-panel="kort">
+          {
+            pakker.map((p, i) => (
+              <article
+                class={`card pakke${p.fremhevet ? ' pakke--valgt' : ''}`}
+                data-reveal
+                data-reveal-trinn={i}
+              >
+                {p.fremhevet && <p class="pakke__merke">Mest populær</p>}
+                <div
+                  class="pakke__media"
+                  data-lys="pakker"
+                  data-lys-src={p.bilde}
+                  data-lys-alt={p.alt}
+                  data-lys-tekst={`${p.navn} – ${p.innhold.join(', ')}`}
+                >
+                  <img
+                    src={p.bilde}
+                    alt={p.alt}
+                    width={p.bredde}
+                    height={p.hoyde}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div class="card__body">
+                  <h3>{p.navn}</h3>
+                  <p class="pakke__pris">
+                    <span class="pakke__pris-tall">{p.prisInkl}</span>
+                    <span class="pakke__pris-mva">inkl. mva</span>
+                  </p>
+                  <p class="pakke__pris-eks">{p.prisEks} eks. mva</p>
+                  <ul class="pakke__innhold">
+                    {p.innhold.map((i) => (
+                      <li>{i}</li>
+                    ))}
+                  </ul>
+                  <p>{p.tekst}</p>
+                  <a class="btn pakke__btn" href="/kontakt/">
+                    Forespør {p.navn.toLowerCase()}
+                  </a>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+
+        <!-- Tabellvisning ----------------------------------------------- -->
+        <div data-panel="tabell" class="tabellboks">
+          <table class="sammenlign">
+            <caption class="visually-hidden">
+              Sammenligning av pakke 1 til 4: pris og innhold
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Pakke</th>
+                <th scope="col">Pris inkl. mva</th>
+                <th scope="col">Pris eks. mva</th>
+                <th scope="col">Dette er med</th>
+                <th scope="col"><span class="visually-hidden">Handling</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                pakker.map((p) => (
+                  <tr class={p.fremhevet ? 'er-fremhevet' : undefined}>
+                    <th scope="row">
+                      {p.navn}
+                      {p.fremhevet && (
+                        <span class="tabellmerke">Mest populær</span>
+                      )}
+                    </th>
+                    <td class="tall">{p.prisInkl}</td>
+                    <td class="tall dempet">{p.prisEks}</td>
+                    <td>{p.innhold.join(' · ')}</td>
+                    <td>
+                      <a class="tabellenke" href="/kontakt/">
+                        Forespør
+                        <span class="visually-hidden"> {p.navn}</span>
+                      </a>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="pakke__fotnote">
+        Prisene gjelder leie. Transport, rigg og personell avtales ut fra
+        arrangementets størrelse og sted – ta kontakt for et konkret tilbud.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================================================== Galleri -- -->
+  <section class="section section--alt" id="galleri">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Referanser</p>
+        <h2>Fra jobber vi har gjort</h2>
+        <p>
+          Et utvalg produksjoner – konserter, arenaer, konferanser og fester.
+          Trykk på et bilde for å se det stort.
+        </p>
+      </div>
+
+      <ul class="galleri">
+        {
+          galleri.map((g, i) => (
+            <li
+              class="galleri__item"
+              data-reveal="skala"
+              data-reveal-trinn={i % 4}
+              data-lys="galleri"
+              data-lys-src={g.src}
+              data-lys-alt={g.alt}
+              data-lys-tekst={g.tekst}
+            >
+              <img
+                src={g.src}
+                alt={g.alt}
+                width={g.bredde}
+                height={g.hoyde}
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="galleri__tekst">{g.tekst}</span>
+              <span class="galleri__zoom" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="6.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M16 16l4.5 4.5M11 8.5v5M8.5 11h5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ CTA -- -->
+  <section class="section cta">
+    <div class="wrap cta__inner" data-reveal>
+      <h2>Har du et arrangement på gang?</h2>
+      <p class="lead">
+        Fortell oss hva du planlegger, så foreslår vi en løsning som passer –
+        og et pristilbud du kan regne med.
+      </p>
+      <div class="btn-row cta__knapper">
+        <a class="btn" href="/kontakt/">Kontakt oss</a>
+        <a class="btn btn--ghost" href={site.phoneHref}>Ring {site.phone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero -------------------------------------------------------------- */
+
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: min(82vh, 48rem);
+    padding-block: clamp(4rem, 10vw, 8rem);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__lerret {
+    position: absolute;
+    inset: -12% 0 -12% 0; /* slingringsmonn så parallaxen ikke blotter kanten */
+    z-index: -2;
+  }
+
+  .hero__bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: hero-zoom 26s var(--ease) infinite alternate;
+  }
+
+  @keyframes hero-zoom {
+    from {
+      scale: 1;
+    }
+    to {
+      scale: 1.09;
+    }
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        100deg,
+        rgb(10 10 14 / 0.94) 0%,
+        rgb(10 10 14 / 0.82) 45%,
+        rgb(10 10 14 / 0.55) 100%
+      ),
+      linear-gradient(0deg, var(--bg) 2%, transparent 40%);
+  }
+
+  .hero__inner {
+    max-width: 62rem;
+  }
+
+  .hero__lead {
+    max-width: 40rem;
+    margin-top: 1.5rem;
+    color: #d6d6e0;
+  }
+
+  /* Scroll-hint */
+  .hero__cue {
+    position: absolute;
+    left: 50%;
+    bottom: 1.75rem;
+    translate: -50% 0;
+    width: 1.6rem;
+    height: 2.6rem;
+    border: 2px solid rgb(255 255 255 / 0.35);
+    border-radius: 999px;
+    display: grid;
+    justify-items: center;
+    padding-top: 0.45rem;
+  }
+
+  .hero__cue span {
+    width: 3px;
+    height: 0.55rem;
+    border-radius: 2px;
+    background: var(--accent);
+    animation: cue 1.9s var(--ease) infinite;
+  }
+
+  .hero__cue:hover {
+    border-color: var(--accent);
+  }
+
+  @keyframes cue {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(0.62rem);
+      opacity: 0.35;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__bg {
+      animation: none;
+    }
+    .hero__cue span {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .hero__cue {
+      display: none;
+    }
+  }
+
+  /* Nøkkeltall -------------------------------------------------------- */
+
+  .trust {
+    padding-block: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .trust__inner {
+    display: grid;
+    gap: 1.5rem 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+
+  .trust__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--accent);
+  }
+
+  .trust__item strong {
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+
+  .trust__item span {
+    color: var(--text-dim);
+    font-size: 0.92rem;
+  }
+
+  /* Om oss ------------------------------------------------------------ */
+
+  .om {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    align-items: center;
+  }
+
+  .om__bilde {
+    margin: 0;
+  }
+
+  .om__bilde img {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.4s var(--ease);
+  }
+
+  .om__bilde:hover img {
+    transform: translateY(-4px);
+  }
+
+  .om__bilde figcaption {
+    margin-top: 0.9rem;
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  /* Bryter (kort / sammenlign) ---------------------------------------- */
+
+  .bryter {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.28rem;
+    margin-bottom: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+
+  .bryter button {
+    padding: 0.5rem 1.25rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.93rem;
+    cursor: pointer;
+    transition: background-color 0.22s var(--ease), color 0.22s var(--ease);
+  }
+
+  .bryter button:hover {
+    color: var(--text);
+  }
+
+  .bryter button[aria-pressed='true'] {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  /* Pakker ------------------------------------------------------------ */
+
+  .pakke {
+    position: relative;
+  }
+
+  .pakke--valgt {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), var(--shadow-lg);
+  }
+
+  .pakke__merke {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+  }
+
+  .pakke__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    display: grid;
+    place-items: center;
+    padding: 1.25rem;
+    background:
+      radial-gradient(
+        ellipse at 50% 115%,
+        rgb(255 138 43 / 0.22),
+        transparent 62%
+      ),
+      var(--surface-2);
+  }
+
+  .pakke__media img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.45s var(--ease);
+  }
+
+  .pakke:hover .pakke__media img {
+    transform: scale(1.06) rotate(-1deg);
+  }
+
+  .pakke__pris {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    margin-top: 0.15rem;
+  }
+
+  .pakke__pris-tall {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+
+  .pakke__pris-mva {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  .pakke__pris-eks {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-top: -0.45rem;
+  }
+
+  .pakke__innhold {
+    list-style: none;
+    padding: 0;
+    margin: 0.35rem 0 0;
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.94rem;
+  }
+
+  .pakke__innhold li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .pakke__innhold li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.62rem;
+    height: 0.62rem;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+  }
+
+  .pakke__btn {
+    margin-top: auto;
+    align-self: stretch;
+    font-size: 0.95rem;
+    padding-inline: 1rem;
+  }
+
+  .pakke__fotnote {
+    margin-top: 2rem;
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    max-width: var(--maxw-text);
+  }
+
+  /* Sammenligningstabell ---------------------------------------------- */
+
+  .tabellboks {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  .sammenlign {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 46rem;
+    font-size: 0.95rem;
+  }
+
+  .sammenlign th,
+  .sammenlign td {
+    text-align: left;
+    padding: 1rem 1.15rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .sammenlign thead th {
+    font-size: 0.75rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+
+  .sammenlign tbody th {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .sammenlign tbody tr:last-child th,
+  .sammenlign tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .sammenlign tbody tr {
+    transition: background-color 0.2s var(--ease);
+  }
+
+  .sammenlign tbody tr:hover {
+    background: var(--surface-2);
+  }
+
+  .sammenlign .tall {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .sammenlign .dempet {
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .er-fremhevet {
+    background: rgb(255 138 43 / 0.06);
+  }
+
+  .tabellmerke {
+    display: inline-block;
+    margin-left: 0.6rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    vertical-align: 2px;
+  }
+
+  .tabellenke {
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .tabellenke:hover {
+    text-decoration: underline;
+  }
+
+  /* Galleri ----------------------------------------------------------- */
+
+  .galleri {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  }
+
+  .galleri__item {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    aspect-ratio: 4 / 3;
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+
+  .galleri__item:hover,
+  .galleri__item:focus-visible {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .galleri__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s var(--ease);
+  }
+
+  .galleri__item:hover img,
+  .galleri__item:focus-visible img {
+    transform: scale(1.05);
+  }
+
+  .galleri__tekst {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 2.25rem 0.95rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(0deg, rgb(0 0 0 / 0.88), transparent);
+  }
+
+  .galleri__zoom {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: rgb(10 10 14 / 0.72);
+    color: #fff;
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  }
+
+  .galleri__item:hover .galleri__zoom,
+  .galleri__item:focus-visible .galleri__zoom {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* CTA --------------------------------------------------------------- */
+
+  .cta__inner {
+    text-align: center;
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .cta__inner .lead {
+    margin-top: 1.1rem;
+  }
+
+  .cta__knapper {
+    justify-content: center;
+  }
+</style>
+
+<script>
+  /* Bryter mellom kortvisning og sammenligningstabell.
+
+     Uten JS er begge panelene synlige og bryteren skjult – siden mister
+     ingenting, den blir bare lengre. Først når dette skriptet kjører
+     skjuler vi det ene panelet og viser kontrollen. */
+
+  const boks = document.querySelector<HTMLElement>('[data-pakkevisning]');
+  const bryter = boks?.querySelector<HTMLElement>('[data-bryter]');
+
+  if (boks && bryter) {
+    const knapper = Array.from(
+      bryter.querySelectorAll<HTMLButtonElement>('button[data-mal]')
+    );
+    const paneler = new Map<string, HTMLElement>();
+    boks.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => {
+      paneler.set(p.dataset.panel!, p);
+    });
+
+    const velg = (mal: string) => {
+      for (const [navn, panel] of paneler) panel.hidden = navn !== mal;
+      for (const k of knapper) {
+        k.setAttribute('aria-pressed', String(k.dataset.mal === mal));
+      }
+    };
+
+    for (const k of knapper) {
+      k.addEventListener('click', () => velg(k.dataset.mal!));
+    }
+
+    bryter.hidden = false;
+    velg('kort');
+  }
+</script>

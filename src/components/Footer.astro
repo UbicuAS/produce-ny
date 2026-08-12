@@ -1,0 +1,138 @@
+---
+import { site } from '../data/site';
+const aar = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="site-footer__top">
+      <div>
+        <a href="/" class="logo" aria-label="Produce AS – til forsiden">
+          <span class="logo__mark" aria-hidden="true"></span>
+          <span>PRODUCE</span>
+        </a>
+        <p class="site-footer__blurb">
+          Lyd, lys og sceneproduksjon til arrangementer i alle størrelser.
+        </p>
+      </div>
+
+      <nav aria-label="Bunnmeny">
+        <h2>Snarveier</h2>
+        <ul>
+          <li><a href="/#tjenester">Tjenester</a></li>
+          <li><a href="/#pakker">Pakkeløsninger</a></li>
+          <li><a href="/#galleri">Galleri</a></li>
+          <li><a href="/#om-oss">Om oss</a></li>
+          <li><a href="/kontakt/">Kontakt oss</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2>Kontakt</h2>
+        <ul class="site-footer__kontakt">
+          <li><a href={site.phoneHref}>{site.phone}</a></li>
+          <li><a href={site.emailHref}>{site.email}</a></li>
+          <li>
+            <a href={site.facebook} rel="noopener noreferrer external">
+              Facebook
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p>© {aar} {site.name}</p>
+      <p class="site-footer__note">
+        Forhåndsvisning laget av Ubicu AS. Innholdet bygger på
+        produce.no og er ikke endelig godkjent.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--bg-alt);
+    border-top: 1px solid var(--border);
+    padding-block: clamp(3rem, 6vw, 4.5rem) 2rem;
+    font-size: 0.95rem;
+  }
+
+  .site-footer__top {
+    display: grid;
+    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+  }
+
+  .logo__mark {
+    width: 0.75rem;
+    height: 1.4rem;
+    border-radius: 3px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+  }
+
+  .site-footer__blurb {
+    color: var(--text-dim);
+    margin-top: 0.9rem;
+    max-width: 24rem;
+  }
+
+  .site-footer h2 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-dim);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .site-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .site-footer a:not(.logo) {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .site-footer a:not(.logo):hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .site-footer__kontakt a {
+    font-weight: 600;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 1.75rem;
+    color: var(--text-dim);
+  }
+
+  .site-footer__note {
+    font-size: 0.85rem;
+    max-width: 38rem;
+  }
+</style>

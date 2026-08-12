@@ -1,0 +1,23 @@
+# Bygg
+dist/
+.astro/
+
+# Avhengigheter
+node_modules/
+
+# Miljø og hemmeligheter
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# Wrangler
+.wrangler/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+._*
+*.swp
+.idea/
+.vscode/

@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Fant ikke siden – Produce AS"
+  description="Siden du lette etter finnes ikke."
+  path="/404/"
+>
+  <section class="section feil">
+    <div class="wrap">
+      <p class="eyebrow">404</p>
+      <h1>Denne siden fant vi ikke</h1>
+      <p class="lead">
+        Lenken kan være utdatert, eller siden kan ha byttet adresse.
+      </p>
+      <div class="btn-row">
+        <a class="btn" href="/">Til forsiden</a>
+        <a class="btn btn--ghost" href="/kontakt/">Kontakt oss</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .feil {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .feil .lead {
+    margin-top: 1.1rem;
+    max-width: 36rem;
+  }
+</style>

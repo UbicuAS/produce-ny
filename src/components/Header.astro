@@ -1,0 +1,356 @@
+---
+import { site } from '../data/site';
+
+const { pathname } = Astro.url;
+const isHome = pathname === '/' || pathname === '';
+
+// Ankerlenker peker til forsiden når vi står på en underside.
+const p = (hash: string) => (isHome ? hash : `/${hash}`);
+
+const lenker = [
+  { href: p('#tjenester'), tekst: 'Tjenester' },
+  { href: p('#pakker'), tekst: 'Pakkeløsninger' },
+  { href: p('#galleri'), tekst: 'Galleri' },
+  { href: p('#om-oss'), tekst: 'Om oss' },
+];
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a href="/" class="logo" aria-label="Produce AS – til forsiden">
+      <span class="logo__mark" aria-hidden="true"></span>
+      <span class="logo__text">PRODUCE</span>
+    </a>
+
+    <button
+      class="burger"
+      type="button"
+      aria-expanded="false"
+      aria-controls="hovedmeny"
+      aria-label="Åpne meny"
+    >
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+
+    <nav id="hovedmeny" class="nav" aria-label="Hovedmeny">
+      <ul>
+        {
+          lenker.map((l) => (
+            <li>
+              <a href={l.href}>{l.tekst}</a>
+            </li>
+          ))
+        }
+        <li>
+          <a
+            href="/kontakt/"
+            class="btn nav__cta"
+            aria-current={pathname.startsWith('/kontakt') ? 'page' : undefined}
+          >
+            Kontakt oss
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Lesefremdrift. Rent dekorativt, derfor skjult for skjermlesere. -->
+  <div class="fremdrift" aria-hidden="true"><span></span></div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(10 10 14 / 0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  }
+
+  /* Litt tettere og tydeligere når man har scrollet forbi heroen. */
+  .site-header.er-scrollet {
+    background: rgb(10 10 14 / 0.96);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 4.5rem;
+    transition: min-height 0.3s var(--ease);
+  }
+
+  .site-header.er-scrollet .site-header__inner {
+    min-height: 3.85rem;
+  }
+
+  /* Fremdriftsindikator ---------------------------------------------- */
+
+  .fremdrift {
+    position: absolute;
+    inset: auto 0 -1px 0;
+    height: 2px;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .fremdrift span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform: scaleX(var(--p, 0));
+    transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--accent), var(--violet));
+  }
+
+  /* Logo ------------------------------------------------------------- */
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    font-size: 1.05rem;
+  }
+
+  .logo__mark {
+    width: 0.85rem;
+    height: 1.6rem;
+    border-radius: 3px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+    box-shadow: 0 0 18px rgb(255 138 43 / 0.55);
+  }
+
+  /* Navigasjon ------------------------------------------------------- */
+
+  .nav ul {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav a {
+    display: block;
+    padding: 0.5rem 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 999px;
+    transition: color 0.18s var(--ease), background-color 0.18s var(--ease);
+  }
+
+  .nav a:hover {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+
+  /* Aktiv seksjon: liten prikk under lenken, ikke en hel farget flate. */
+  .nav a.er-aktiv:not(.nav__cta) {
+    color: var(--text);
+  }
+
+  .nav a.er-aktiv:not(.nav__cta)::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 5px;
+    margin: 3px auto 0;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* Må være .nav a.nav__cta, ikke bare .nav__cta: .nav a er mer spesifikk
+     og ville ellers overstyre fargen til --text-muted. Det ga lys grå tekst
+     på ravgul flate (~1.7:1) – langt under AA. */
+  .nav a.nav__cta,
+  .nav a.nav__cta:hover {
+    color: var(--accent-ink);
+    margin-left: 0.5rem;
+    padding: 0.65rem 1.35rem;
+    font-size: 0.95rem;
+  }
+
+  /* Burger ----------------------------------------------------------- */
+
+  .burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.9rem;
+    height: 2.9rem;
+    padding: 0 0.65rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .burger span {
+    display: block;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.22s var(--ease), opacity 0.22s var(--ease);
+  }
+
+  .burger[aria-expanded='true'] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .burger[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .burger[aria-expanded='true'] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 860px) {
+    .burger {
+      display: flex;
+    }
+
+    .nav {
+      position: absolute;
+      inset: 100% 0 auto 0;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem var(--gutter) 1.5rem;
+      display: none;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .nav[data-open='true'] {
+      display: block;
+    }
+
+    .nav ul {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.15rem;
+    }
+
+    .nav a {
+      padding: 0.85rem 0.5rem;
+      font-size: 1.05rem;
+      border-radius: var(--radius);
+    }
+
+    .nav__cta {
+      margin: 0.75rem 0 0;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('.burger');
+  const nav = document.querySelector<HTMLElement>('#hovedmeny');
+
+  if (burger && nav) {
+    const setOpen = (open: boolean) => {
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Lukk meny' : 'Åpne meny');
+      nav.dataset.open = String(open);
+    };
+
+    burger.addEventListener('click', () => {
+      setOpen(burger.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Lukk når man velger et menypunkt, og på Escape.
+    nav.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && burger.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        burger.focus();
+      }
+    });
+  }
+
+  /* ------------------------------------------------- Scroll-tilstand -- */
+
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const stripe = document.querySelector<HTMLElement>('.fremdrift span');
+
+  if (header) {
+    let ticking = false;
+
+    const oppdater = () => {
+      const y = window.scrollY;
+      header.classList.toggle('er-scrollet', y > 24);
+
+      if (stripe) {
+        const hoyde =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const andel = hoyde > 0 ? Math.min(y / hoyde, 1) : 0;
+        stripe.style.setProperty('--p', String(andel));
+      }
+
+      ticking = false;
+    };
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(oppdater);
+      },
+      { passive: true }
+    );
+
+    oppdater();
+  }
+
+  /* -------------------------------------------- Aktiv seksjon i meny -- */
+
+  const seksjonsLenker = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('.nav a[href*="#"]')
+  );
+
+  if (seksjonsLenker.length && 'IntersectionObserver' in window) {
+    const kart = new Map<Element, HTMLAnchorElement>();
+
+    for (const lenke of seksjonsLenker) {
+      const id = lenke.getAttribute('href')?.split('#')[1];
+      if (!id) continue;
+      const seksjon = document.getElementById(id);
+      if (seksjon) kart.set(seksjon, lenke);
+    }
+
+    if (kart.size) {
+      // Båndet ligger i øvre tredjedel: seksjonen som passerer der regnes
+      // som den man "er i". Uten et slikt bånd flimrer markeringen.
+      const obs = new IntersectionObserver(
+        (poster) => {
+          for (const post of poster) {
+            if (!post.isIntersecting) continue;
+            for (const l of kart.values()) l.classList.remove('er-aktiv');
+            kart.get(post.target)?.classList.add('er-aktiv');
+          }
+        },
+        { rootMargin: '-18% 0px -72% 0px', threshold: 0 }
+      );
+
+      for (const seksjon of kart.keys()) obs.observe(seksjon);
+    }
+  }
+</script>

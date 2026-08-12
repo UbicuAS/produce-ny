@@ -1,0 +1,179 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PreviewBanner from '../components/PreviewBanner.astro';
+import Lightbox from '../components/Lightbox.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Sti uten domene, f.eks. "/kontakt/" */
+  path?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description,
+  path = '/',
+  ogImage = '/bilder/galleri/staysman.webp',
+} = Astro.props;
+
+const site = 'https://produce.ubicu.cloud';
+const canonical = new URL(path, site).href;
+const ogImageUrl = new URL(ogImage, site).href;
+---
+
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!--
+      FORHÅNDSVISNING. Denne siden ligger på ubicu.cloud, ikke på produce.no,
+      og skal ikke indekseres av søkemotorer. Fjernes først når siden
+      eventuelt settes i drift på kundens eget domene.
+    -->
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="googlebot" content="noindex, nofollow" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Produce AS" />
+    <meta property="og:locale" content="nb_NO" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content="Konsert med scenelys rigget av Produce AS" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <meta name="theme-color" content="#0a0a0e" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0e'/%3E%3Ctext x='16' y='23' font-family='system-ui,sans-serif' font-size='20' font-weight='800' fill='%23ff8a2b' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E"
+    />
+
+    <slot name="head" />
+
+    <!--
+      Settes før første maling, ellers ville innholdet blinket synlig et
+      øyeblikk før reveal-reglene slo inn. Er JS av, får <html> aldri .js,
+      og da er alt synlig fra start – som er den riktige oppførselen.
+    -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Hopp til hovedinnhold</a>
+    <PreviewBanner />
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <Lightbox />
+
+    <script>
+      /* ------------------------------------------------------------------
+         Bevegelse: reveal ved scroll + parallax i hero.
+
+         Sikkerhetsnett: hvis IntersectionObserver mangler, eller noe kaster,
+         viser vi ALT umiddelbart. En besøkende skal aldri ende opp med en
+         tom side fordi en effekt feilet.
+         ------------------------------------------------------------------ */
+
+      const redusert = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      const visAlt = () => {
+        document
+          .querySelectorAll('[data-reveal]')
+          .forEach((el) => el.classList.add('is-inn'));
+      };
+
+      const startReveal = () => {
+        const mål = document.querySelectorAll<HTMLElement>('[data-reveal]');
+        if (!mål.length) return;
+
+        if (redusert.matches || !('IntersectionObserver' in window)) {
+          visAlt();
+          return;
+        }
+
+        const obs = new IntersectionObserver(
+          (poster) => {
+            for (const post of poster) {
+              if (!post.isIntersecting) continue;
+              const el = post.target as HTMLElement;
+
+              // Trinnvis forsinkelse innenfor samme gruppe gir en rolig
+              // kaskade i stedet for at ti kort spretter inn samtidig.
+              const trinn = Number(el.dataset.revealTrinn || 0);
+              el.style.setProperty('--reveal-delay', `${trinn * 90}ms`);
+              el.classList.add('is-inn');
+              obs.unobserve(el);
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.08 }
+        );
+
+        mål.forEach((el) => obs.observe(el));
+
+        // Nødbrems: skulle observeren aldri fyre, vises alt etter 3 sekunder.
+        window.setTimeout(visAlt, 3000);
+      };
+
+      const startParallax = () => {
+        const lag = document.querySelectorAll<HTMLElement>('[data-parallax]');
+        if (!lag.length || redusert.matches) return;
+
+        let ticking = false;
+
+        const oppdater = () => {
+          const y = window.scrollY;
+          for (const el of lag) {
+            const styrke = Number(el.dataset.parallax || 0.2);
+            // Beveger seg saktere enn siden -> dybde uten at bildet slipper
+            // toppen av seksjonen.
+            el.style.transform = `translate3d(0, ${y * styrke}px, 0)`;
+          }
+          ticking = false;
+        };
+
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(oppdater);
+          },
+          { passive: true }
+        );
+
+        oppdater();
+      };
+
+      try {
+        startReveal();
+        startParallax();
+        // Bytter brukeren innstilling underveis, respekterer vi det med en gang.
+        redusert.addEventListener('change', (e) => {
+          if (e.matches) visAlt();
+        });
+      } catch {
+        visAlt();
+      }
+    </script>
+  </body>
+</html>
