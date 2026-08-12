@@ -132,20 +132,33 @@ blir liggende åpen etter lansering.
 ## Hosting – GitHub Pages
 
 Siden ligger på **GitHub Pages**, samme oppsett som `idebolig.ubicu.cloud`.
+Kildekoden er på `main`; branchen `gh-pages` inneholder kun det ferdige bygget
+og er den GitHub serverer.
 
 ```
-git push origin main
+npm run publiser
         │
-        ├─ .github/workflows/publiser.yml: npm ci → npm run build
-        └─ dist/ lastes opp og legges ut på produce.ubicu.cloud
+        ├─ nekter hvis noe er ucommittet
+        ├─ npm run build
+        └─ dytter dist/ til gh-pages → produce.ubicu.cloud
 ```
 
-Du trenger ikke gjøre noe utover å pushe til `main`. Vil du legge ut på nytt
-uten en ny commit, kjør workflowen manuelt fra Actions-fanen.
+**Hvorfor et skript og ikke en workflow.** Den riktige løsningen er å la GitHub
+bygge selv ved push til `main`, og den workflowen ligger ferdig i
+`.github/workflows/publiser.yml`. Den kan bare ikke pushes: GitHub nekter
+OAuth-apper å skrive under `.github/workflows/` uten `workflow`-scope, og
+innloggingen på maskinen har det ikke. Får tokenet det scopet, push workflowen,
+sett Pages-kilden tilbake til «GitHub Actions» og slett `tools/publiser.py`.
 
-**`public/CNAME` er det som holder på domenet.** Astro kopierer den til
-`dist/CNAME` ved bygg. Sletter du den, faller `produce.ubicu.cloud` av ved
-neste publisering, og siden havner tilbake på `ubicuas.github.io`.
+**To filer i `public/` holder siden oppe, og begge er lette å slette i vanvare:**
+
+| Fil | Hva den gjør | Hvis den forsvinner |
+|---|---|---|
+| `CNAME` | holder på custom-domenet | siden faller tilbake til `ubicuas.github.io` |
+| `.nojekyll` | slår av Jekyll-behandling | hele `_astro/`-mappa droppes, og siden lastes uten stil og skript |
+
+Astro kopierer begge til `dist/` ved bygg, og `npm run publiser` nekter å legge
+ut hvis en av dem mangler.
 
 **DNS ligger hos Domeneshop**, ikke hos GitHub – `ubicu.cloud` bruker
 navnetjenerne `ns1-3.hyp.net`. Underdomenet peker på GitHub Pages' fire
