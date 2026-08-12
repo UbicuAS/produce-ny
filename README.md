@@ -3,10 +3,9 @@
 Utkast til ny nettside for Produce AS, laget av Ubicu AS. Bygget som en ren
 statisk Astro-side.
 
-**Status: ikke publisert.** Siden ligger ingen steder i drift. Den er merket
-`noindex` i `<head>` og sperret i `robots.txt`, og har en tydelig
-forhåndsvisningsbanner øverst på hver side. Alle tre sperrene skal fjernes
-samtidig – og først når kunden har godkjent innholdet og hostingen er avklart.
+**Status: ikke publisert noe sted.** Målet er å legge den ut som
+forhåndsvisning på `produce.ubicu.cloud` for kundegodkjenning. Se
+«Forhåndsvisning kontra drift» under.
 
 ## Kom i gang
 
@@ -37,6 +36,40 @@ Forsiden har seksjonene hero, nøkkeltall, tjenester, om oss, pakkeløsninger
 
 All tekst, priser, bilder og kontaktopplysninger ligger samlet i
 `src/data/site.ts`. Endre innhold der, ikke i malene.
+
+## Forhåndsvisning kontra drift
+
+`produce.ubicu.cloud` er en **forhåndsvisning for kundegodkjenning**, ikke
+kundens side i drift. Kundens egen side er `produce.no` og skal ikke røres.
+
+Fordi innholdet er nesten identisk med produce.no, må forhåndsvisningen aldri
+kunne finnes i søk – to like sider konkurrerer om de samme søkeordene, til
+skade for kundens egen synlighet.
+
+Alt dette styres av **én bryter**: `erForhandsvisning` i `src/data/site.ts`.
+Den slår av og på fire ting samtidig:
+
+| # | Sperre | Hvor |
+|---|--------|------|
+| 1 | `noindex, nofollow, noarchive` | `src/layouts/Base.astro` |
+| 2 | `Disallow: /` i robots.txt | `src/pages/robots.txt.ts` |
+| 3 | Forhåndsvisningsbanner øverst | `src/layouts/Base.astro` |
+| 4 | «ikke endelig godkjent» i footeren | `src/components/Footer.astro` |
+
+### Flytteoppgaven, den dagen kunden godkjenner
+
+To linjer:
+
+1. `erForhandsvisning = false` i `src/data/site.ts`
+2. `site: 'https://produce.no'` i `astro.config.mjs`
+
+Alt annet følger etter. Adressen bor kun i `astro.config.mjs`; `Base.astro`
+leser `Astro.site`, så canonical, `og:url` og `og:image` snur av seg selv.
+Dette er verifisert ved å faktisk gjøre byttet og bygge – ikke antatt.
+
+Husk i tillegg, utenfor koden: fjern DNS-oppføringen for
+`produce.ubicu.cloud` når den ikke lenger skal brukes, så preview-en ikke
+blir liggende åpen etter lansering.
 
 ## Hosting – ikke avklart
 
