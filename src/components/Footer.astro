@@ -1,5 +1,6 @@
 ---
 import { site, erForhandsvisning } from '../data/site';
+import logo from '../assets/produce-logo.svg?raw';
 const aar = new Date().getFullYear();
 ---
 
@@ -7,10 +8,16 @@ const aar = new Date().getFullYear();
   <div class="wrap">
     <div class="site-footer__top">
       <div>
-        <a href="/" class="logo" aria-label="Produce AS – til forsiden">
-          <span class="logo__mark" aria-hidden="true"></span>
-          <span>PRODUCE</span>
-        </a>
+        {
+          /* Her er det plass til logoen slik den er i logopakken – stående,
+             med ordmerket under merket. Topplinja bruker den liggende. */
+        }
+        <a
+          href="/"
+          class="logo"
+          aria-label="Produce AS – til forsiden"
+          set:html={logo}
+        />
         <p class="site-footer__blurb">
           Lyd, lys og sceneproduksjon til arrangementer i alle størrelser.
         </p>
@@ -77,20 +84,16 @@ const aar = new Date().getFullYear();
   }
 
   .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.65rem;
+    display: inline-block;
     color: var(--text);
     text-decoration: none;
-    font-weight: 900;
-    letter-spacing: 0.16em;
   }
 
-  .logo__mark {
-    width: 0.75rem;
-    height: 1.4rem;
-    border-radius: 3px;
-    background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+  /* :global fordi SVG-en kommer fra set:html og ikke får Astros scope-klasse. */
+  .logo :global(svg) {
+    display: block;
+    height: 4.75rem;
+    width: auto;
   }
 
   .site-footer__blurb {
@@ -122,7 +125,7 @@ const aar = new Date().getFullYear();
   }
 
   .site-footer a:not(.logo):hover {
-    color: var(--accent);
+    color: var(--accent-text);
     text-decoration: underline;
   }
 

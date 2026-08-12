@@ -1,8 +1,8 @@
 /* ==========================================================================
    Produce AS - designsystem
-   Mørk scenepalett: nesten svart bunn, ravgul aksent som plukker opp
-   lyskasterne i bildene. Alle tekstfarger er kontrastsjekket mot bunnen
-   de faktisk ligger på (WCAG AA, 4.5:1 for brødtekst).
+   Mørk scenepalett: nesten svart bunn, med logoens røde som aksent. Alle
+   tekstfarger er kontrastsjekket mot bunnen de faktisk ligger på
+   (WCAG AA, 4.5:1 for brødtekst).
    ========================================================================== */
 
 :root {
@@ -18,11 +18,21 @@
   --text-muted: #b0b0c0;  /* 8.9:1 mot --bg  */
   --text-dim: #8b8b9c;    /* 5.6:1 mot --bg  */
 
-  /* Aksent */
-  --accent: #ff8a2b;      /* 9.4:1 mot --bg  */
-  --accent-strong: #ff6a00;
-  --accent-ink: #1a0e00;  /* tekst på ravgul flate, 11.6:1 */
-  --violet: #a06bff;
+  /* Aksent - logoens røde.
+     Logoen selv bruker #ED1C24 (målt ut av Logo/Produce logo svart.png), og
+     den fargen står urørt i selve logofilene. Tokenene under er samme røde
+     justert i lyshet, fordi ÉN rød ikke kan gjøre begge jobbene: en rød som
+     er lys nok til å være tekst på nesten svart, er for lys til å ha hvit
+     tekst oppå seg. Målt mot flaten hver enkelt faktisk ligger på. */
+  --accent: #e51c23;         /* fylte flater. Hvit tekst oppå: 4.6:1 */
+  --accent-text: #f5555c;    /* rød tekst på mørk flate: 6.0:1 mot --bg,
+                                5.0:1 mot --surface-2 (den lyseste flaten) */
+  --accent-text-hover: #ff8a8f; /* 8.7:1 mot --bg */
+  --accent-strong: #b8151b;  /* hover på fylt flate. Hvit tekst: 6.6:1 */
+  --accent-ink: #ffffff;     /* tekst oppå rød flate */
+  /* --violet er fjernet. Den ble brukt ett sted, i lesefremdriften øverst, og
+     en fiolett strek rett under en rød logo leste som en tredje merkefarge.
+     Fremdriften går nå fra --accent til --accent-text-hover. */
 
   /* Mål og rytme */
   --maxw: 1200px;
@@ -130,17 +140,19 @@ p {
 }
 
 a {
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
 }
 
+/* Lysere, ikke mørkere, ved hover. Med ravgult gikk hover nedover i lyshet og
+   holdt fortsatt AA; en mørkere rød på nesten svart bunn havner på 3:1. */
 a:hover {
-  color: var(--accent-strong);
+  color: var(--accent-text-hover);
 }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--accent-text);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -187,7 +199,7 @@ a:hover {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   margin-bottom: 0.85rem;
 }
 
@@ -417,7 +429,7 @@ html.js [data-reveal='skala'] {
 .lenke-strek {
   position: relative;
   text-decoration: none;
-  background-image: linear-gradient(var(--accent), var(--accent));
+  background-image: linear-gradient(var(--accent-text), var(--accent-text));
   background-repeat: no-repeat;
   background-position: 0 100%;
   background-size: 0% 2px;

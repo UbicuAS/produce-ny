@@ -8,8 +8,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "serve": "python -m http.server 4321 --directory dist"
+    "sync": "python C:\\Ubicu\\preview\\preview.py produce-ny --bare-kopier"
   },
   "dependencies": {
     "astro": "^5.14.1"

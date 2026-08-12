@@ -12,16 +12,34 @@ forhåndsvisning på `produce.ubicu.cloud` for kundegodkjenning. Se
 ```
 npm install
 npm run build     # bygger til dist/
-npm run serve     # serverer dist/ på http://localhost:4321
 ```
 
-`npm run preview` (Astros egen preview-server) **henger** når prosjektet ligger
-på SMB-delingen `Z:` – den binder aldri porten og skriver ingenting til
-konsollen. Målt 2026-08-12: prosessen kjørte 25 sekunder uten output og måtte
-avbrytes. Bruk `npm run serve` i stedet; den serverer nøyaktig de samme filene
-fra `dist/`, som er det hostingen kommer til å gjøre uansett.
+Deretter startes `produce-ny` fra `../.claude/launch.json` – den svarer på
+`http://localhost:4321`.
 
-Lokal server er også registrert i `../.claude/launch.json` som `produce-ny`.
+**Serveren leser fra `C:\Ubicu\preview\produce-ny`, ikke fra `Z:`.** Den kopierer
+`dist/` dit selv ved oppstart. Bygger du på nytt mens serveren kjører, oppdater
+kopien og last om nettleseren – serveren trenger ikke restart:
+
+```
+npm run sync
+```
+
+Grunnen til kopisteget: en server som lever med åpne filhåndtak mot SMB-delingen
+`Z:` henger når delingen ryker, og tar den MSIX-pakkede Claude-appen med seg i
+fallet. Hele forklaringen står i `../.claude/preview/README.md`.
+
+**`npm run serve` og `npm run preview` er fjernet.** Begge lot en langtlevende
+prosess stå med arbeidsmappe på `Z:` – `npm run` holder i tillegg node og cmd i
+live som foreldre, med samme arbeidsmappe. `astro preview` hang allerede i
+praksis: målt 2026-08-12 band den aldri porten, skrev ingenting til konsollen og
+måtte avbrytes etter 25 sekunder. De er fjernet framfor å stå igjen og se ut som
+fungerende utveier.
+
+**Ikke bruk `npm run dev` så lenge prosjektet ligger på `Z:`.** Astros
+utviklingsserver er langtlevende og legger i tillegg en filovervåker på
+delingen. Bygg i stedet – `npm run build` er kortlevd – og se på resultatet via
+`produce-ny`-serveren.
 
 ## Innhold
 
@@ -36,6 +54,46 @@ Forsiden har seksjonene hero, nøkkeltall, tjenester, om oss, pakkeløsninger
 
 All tekst, priser, bilder og kontaktopplysninger ligger samlet i
 `src/data/site.ts`. Endre innhold der, ikke i malene.
+
+## Logo og farger
+
+Logoen er kundens egen, hentet fra logopakken i `../Produce AS/Logo/`.
+Kurvene er ikke tegnet på nytt.
+
+```
+python tools/lag-logo.py
+```
+
+lager fire filer ut fra `../Produce AS/Logo/SVG/Untitled-1.svg`:
+
+| Fil | Hva | Brukes av |
+|---|---|---|
+| `src/assets/produce-merke.svg` | av/på-merket alene | topplinja |
+| `src/assets/produce-ordmerke.svg` | ordet PRODUCE alene | topplinja |
+| `src/assets/produce-logo.svg` | hele logoen, stående | bunnteksten |
+| `public/favicon.svg` | merket i mørk rute | fanen |
+
+**Ikke rediger de fire filene for hånd** – kjør skriptet på nytt. Det gjør tre
+ting originalen ikke kan: plukker logokurvene ut av det hvite bakgrunns-
+rektangelet de er stanset ut av, setter ring og bokstaver til `currentColor`
+så logoen virker på mørk bunn, og gir bokstavene `fill-rule="evenodd"` så
+motformene i P, R, O og D blir hull og ikke massive flater.
+
+**Den røde er logoens egen, `#ED1C24`**, målt ut av `Produce logo svart.png`.
+Den står urørt i logofilene. Aksentfargene i `src/styles/global.css` er samme
+røde justert i lyshet, fordi én rød ikke kan både være lys nok til å leses som
+tekst på nesten svart og mørk nok til å ha hvit tekst oppå seg:
+
+| Token | Verdi | Rolle |
+|---|---|---|
+| `--accent` | `#e51c23` | fylte flater – hvit tekst oppå holder 4,6:1 |
+| `--accent-text` | `#f5555c` | rød tekst på mørk flate – 5,0:1 mot den lyseste flaten |
+| `--accent-text-hover` | `#ff8a8f` | hover på lenker (lysere, ikke mørkere) |
+| `--accent-strong` | `#b8151b` | hover på fylt flate |
+| `--accent-ink` | `#ffffff` | tekst oppå rød flate |
+
+Bruker du rød som **tekst**, bruk `--accent-text`. Bruker du rød som **flate**,
+bruk `--accent` med `--accent-ink` oppå. Blander du dem, ryker AA.
 
 ## Forhåndsvisning kontra drift
 
