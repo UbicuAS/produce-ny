@@ -5,6 +5,27 @@
  * produce.no i dag. Det ser ut som et plassholdernummer og bør bekreftes
  * med kunden før siden eventuelt settes i drift.
  */
+/**
+ * ÉN BRYTER for hele forhåndsvisningsmodusen.
+ *
+ * Så lenge denne er `true` er siden en forhåndsvisning for kundegodkjenning
+ * på produce.ubicu.cloud, og skal ikke kunne finnes i søk. Den styrer tre
+ * ting samtidig, som ellers ville vært lett å skru av bare delvis:
+ *
+ *   1. `noindex, nofollow, noarchive` i <head>      (Base.astro)
+ *   2. `Disallow: /` i robots.txt                   (pages/robots.txt.ts)
+ *   3. den synlige forhåndsvisningsbanneren         (Base.astro)
+ *
+ * Grunnen til at de er koblet sammen: en preview som ligger åpen på
+ * ubicu.cloud, konkurrerer med kundens egen produce.no om de samme
+ * søkeordene. To sider med nesten identisk innhold er en reell risiko for
+ * produce.no sin synlighet, ikke bare en skjønnhetsfeil.
+ *
+ * VED FLYTTING TIL PRODUCE.NO: sett denne til `false` OG bytt `site` i
+ * astro.config.mjs. Det er de to eneste stedene adressen og sperrene bor.
+ */
+export const erForhandsvisning = true;
+
 export const site = {
   name: 'Produce AS',
   tagline: 'Din event-partner',

@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PreviewBanner from '../components/PreviewBanner.astro';
 import Lightbox from '../components/Lightbox.astro';
+import { erForhandsvisning } from '../data/site';
 
 interface Props {
   title: string;
@@ -20,9 +21,17 @@ const {
   ogImage = '/bilder/galleri/staysman.webp',
 } = Astro.props;
 
-const site = 'https://produce.ubicu.cloud';
-const canonical = new URL(path, site).href;
-const ogImageUrl = new URL(ogImage, site).href;
+/**
+ * Adressen kommer fra `site` i astro.config.mjs, ikke fra en konstant her.
+ * Sto den to steder, ville et bytte fra forhåndsvisning til produce.no
+ * kreve at man husket begge – og den man glemte, ville stille peke
+ * canonical og Open Graph mot feil domene.
+ *
+ * `Astro.site` er alltid satt så lenge konfigurasjonen har `site`.
+ */
+const basis = Astro.site!;
+const canonical = new URL(path, basis).href;
+const ogImageUrl = new URL(ogImage, basis).href;
 ---
 
 <!doctype html>
@@ -35,13 +44,25 @@ const ogImageUrl = new URL(ogImage, site).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <!--
-      FORHÅNDSVISNING. Denne siden ligger på ubicu.cloud, ikke på produce.no,
-      og skal ikke indekseres av søkemotorer. Fjernes først når siden
-      eventuelt settes i drift på kundens eget domene.
-    -->
-    <meta name="robots" content="noindex, nofollow, noarchive" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    {
+      /*
+        FORHÅNDSVISNING. Siden ligger på ubicu.cloud, ikke på produce.no, og
+        skal ikke kunne finnes i søk – den ville ellers konkurrert med
+        kundens egen side om de samme søkeordene.
+
+        Styres av `erForhandsvisning` i src/data/site.ts, sammen med
+        robots.txt og banneren. Ikke fjern disse to linjene manuelt; skru av
+        bryteren, så forsvinner alle tre sperrene samtidig.
+      */
+    }
+    {
+      erForhandsvisning && (
+        <>
+          <meta name="robots" content="noindex, nofollow, noarchive" />
+          <meta name="googlebot" content="noindex, nofollow" />
+        </>
+      )
+    }
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Produce AS" />
@@ -77,7 +98,7 @@ const ogImageUrl = new URL(ogImage, site).href;
 
   <body>
     <a class="skip-link" href="#main">Hopp til hovedinnhold</a>
-    <PreviewBanner />
+    {erForhandsvisning && <PreviewBanner />}
     <Header />
     <main id="main">
       <slot />

@@ -1,5 +1,5 @@
 ---
-import { site } from '../data/site';
+import { site, erForhandsvisning } from '../data/site';
 const aar = new Date().getFullYear();
 ---
 
@@ -43,10 +43,19 @@ const aar = new Date().getFullYear();
 
     <div class="site-footer__bottom">
       <p>© {aar} {site.name}</p>
-      <p class="site-footer__note">
-        Forhåndsvisning laget av Ubicu AS. Innholdet bygger på
-        produce.no og er ikke endelig godkjent.
-      </p>
+      {
+        /* Fjerde forhåndsvisningsmerket. Hører sammen med de tre andre og
+           følger samme bryter – ellers ville en lansert side fortsatt stått
+           og sagt om seg selv at den ikke er godkjent. */
+      }
+      {
+        erForhandsvisning && (
+          <p class="site-footer__note">
+            Forhåndsvisning laget av Ubicu AS. Innholdet bygger på produce.no
+            og er ikke endelig godkjent.
+          </p>
+        )
+      }
     </div>
   </div>
 </footer>
